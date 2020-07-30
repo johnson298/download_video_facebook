@@ -1,0 +1,40 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title= title
+  link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css')
+  link(rel='stylesheet' href='assets/style.css')
+  script(src='https://code.jquery.com/jquery-3.5.1.js')
+.container.mt-5
+  .row
+    .col-12.justify-content-center
+      .form-group
+        label(for='link') Nhập link video
+        input#link.form-control(type='text' placeholder='Paste link in here !' value='https://www.facebook.com/warnermusicvn/videos/584128718961720/')
+      button.btn.btn-success#getLink Get link
+    .col-12.justify-content-center
+        p.text-danger#loading Đợi xíu nha....
+        a#result_link
+
+script.
+  $(document).ready(function() {
+    $('#loading').hide();
+    $('#getLink').click(function() {
+        const linkVideo = $('#link').val();
+        $.ajax({
+            type: 'POST',
+            url: '/get-link',
+            data: JSON.stringify({ linkVideo }),
+            contentType: "application/json",
+            dataType: "json",
+            beforeSend() {
+                $('#loading').show();
+            },
+            success(data) {
+                $('#result_link').attr("href", data).text(data);
+                $('#loading').hide();
+            }
+        })
+    })
+  })
